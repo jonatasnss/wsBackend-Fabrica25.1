@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ filme.titulo }} - CineVerso{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-4">
+        {% if filme.poster_url %}
+        <img src="{{ filme.poster_url }}" class="img-fluid rounded" alt="{{ filme.titulo }}">
+        {% else %}
+        <div class="text-center p-5 bg-secondary rounded">
+            <i class="fas fa-film fa-5x"></i>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h1 class="mb-3">{{ filme.titulo }} <span class="text-muted">({{ filme.ano }})</span></h1>
+        
+        {% if filme.diretor %}
+        <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
+        {% endif %}
+        
+        {% if filme.genero %}
+        <p><strong>Gênero:</strong> {{ filme.genero }}</p>
+        {% endif %}
+        
+        {% if filme.sinopse %}
+        <div class="mb-4">
+            <h5>Sinopse</h5>
+            <p>{{ filme.sinopse }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="mb-4">
+            <a href="https://www.imdb.com/title/{{ filme.imdb_id }}" target="_blank" class="btn btn-outline-light">
+                <i class="fab fa-imdb me-2"></i>Ver no IMDb
+            </a>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <div class="card bg-dark border-secondary mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Adicionar às Coleções</h5>
+            </div>
+            <div class="card-body">
+                {% if colecoes_usuario %}
+                <form method="GET" action="{% url 'adicionar_filme_colecao' filme.imdb_id 0 %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <select class="form-select" id="colecaoSelect" name="colecao_id">
+                            <option selected disabled>Selecione uma coleção...</option>
+                            {% for colecao in colecoes_usuario %}
+                            <option value="{{ colecao.id }}">{{ colecao.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Adicionar
+                    </button>
+                </form>
+                {% else %}
+                <p>Você ainda não tem coleções.</p>
+                <a href="{% url 'criar_colecao' %}" class="btn btn-primary">
+                    <i class="fas fa-folder-plus me-2"></i>Criar Coleção
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="card bg-dark border-secondary">
+            <div class="card-header">
+                <h5 class="mb-0">Coleções que contêm este filme</h5>
+            </div>
+            <div class="card-body">
+                {% if filme.colecoes.all %}
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% for colecao in filme.colecoes.all %}
+                    <li class="list-group-item bg-transparent border-secondary d-flex justify-content-between align-items-center">
+                        <a href="{% url 'detalhes_colecao' colecao.id %}" class="text-decoration-none text-light">
+                            {{ colecao.nome }}
+                        </a>
+                        {% if colecao.usuario == user %}
+                        <a href="{% url 'remover_filme_colecao' filme.imdb_id colecao.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="mb-0">Este filme não está em nenhuma coleção ainda.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

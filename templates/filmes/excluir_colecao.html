@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir {{ colecao.nome }} - CineVerso{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card bg-dark border-secondary">
+            <div class="card-header">
+                <h2 class="mb-0"  style="text-align: center;">Excluir Coleção</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h4 class="alert-heading">Atenção!</h4>
+                    <p>Você está prestes a excluir a <strong>{{ colecao.nome }}</strong>.</p>
+                    <p>Esta ação não pode ser desfeita viu, tudo será excluido.</p>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'detalhes_colecao' colecao.id %}" class="btn btn-success text-dark">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

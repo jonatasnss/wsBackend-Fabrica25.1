@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ colecao.nome }} - CineVerso{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>{{ colecao.nome }}</h1>
+        <div>
+            <a href="{% url 'editar_colecao' colecao.id %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-edit me-1"></i>Editar
+            </a>
+            <a href="{% url 'excluir_colecao' colecao.id %}" class="btn btn-outline-danger">
+                <i class="fas fa-trash-alt me-1"></i>Excluir
+            </a>
+        </div>
+    </div>
+    <p class="lead">{{ colecao.descricao|default:"Sem descrição" }}</p>
+    <p><small class="text-muted">Criada em {{ colecao.data_criacao|date:"d/m/Y" }}</small></p>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Filmes na Coleção</h2>
+    <a href="{% url 'pesquisar_filmes' %}" class="btn btn-primary">
+        <i class="fas fa-search me-2"></i>Adicionar Filmes
+    </a>
+</div>
+
+{% if filmes %}
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for filme in filmes %}
+    <div class="col">
+        <div class="card h-100 bg-dark border-secondary">
+            {% if filme.poster_url %}
+            <img src="{{ filme.poster_url }}" class="card-img-top" alt="{{ filme.titulo }}">
+            {% else %}
+            <div class="text-center p-4 bg-secondary">
+                <i class="fas fa-film fa-3x"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ filme.titulo }}</h5>
+                <p class="card-text text-muted">{{ filme.ano }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-secondary">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'detalhes_filme' filme.imdb_id %}" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-eye me-1"></i>Detalhes
+                    </a>
+                    <a href="{% url 'remover_filme_colecao' filme.imdb_id colecao.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <p>Esta coleção ainda não tem filmes. Use o botão "Adicionar Filmes" para pesquisar e adicionar filmes à sua coleção.</p>
+</div>
+{% endif %}
+{% endblock %}
