@@ -9,7 +9,7 @@
         <a href="#autor">Autor</a> •
         <a href="#considerações">Considerações</a>
     </p>
-    <h2><a id="demo"></a>Demo</h2>
+    <h2><a id="demo"></a>Demo (LEIA TUDO PARA EXECUTAR) </h2>
     <img alt="GIF" title="GIF do Readme" src="./github/AnimacaoGIF.gif"/>
 </div>
 
@@ -32,28 +32,30 @@ CineVerso é uma aplicação web desenvolvida com Django que permite aos usuári
 ## <a id="configuracoes"></a>Configurações
 
 
-1. Crie um ambiente virtual e ative:
+1. Crie uma pasta usando "mkdir" chamada "project"
+   ```
+   E mova todos os arquivos para a pasta " project "
+   ```
+
+2. Crie um ambiente virtual e ative:
    ```
    python -m venv venv
    venv\Scripts\activate
    ```
-
-2. Instale as dependências:
+3. Execute: 
+   ```
+   pip install requests
+   (Lembrando sempre de estar na pasta "cd project)
+   ```
+4. Execute:
    ```
    pip install -r requirements.txt
-   ```
-3. Pegue a chave do API em [omdbapi.com]
-   ```
-   (https://www.omdbapi.com/apikey.aspx)
+   pip install django
 
-4. Crie um arquivo `.env` na raiz do seu projeto e adicione tua chave API:
-   ```
-   OMDB_API_KEY=coloca_a_api_aqui
    ```
 
 5. Execute as migrações:
    ```
-   python manage.py makemigrations
    python manage.py migrate
    ```
 
